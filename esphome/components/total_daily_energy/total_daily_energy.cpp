@@ -24,6 +24,8 @@ void TotalDailyEnergy::setup() {
 void TotalDailyEnergy::dump_config() { LOG_SENSOR("", "Total Daily Energy", this); }
 
 void TotalDailyEnergy::loop() {
+  if (!this->reset_)
+    return;
   auto t = this->time_->now();
   if (!t.is_valid())
     return;

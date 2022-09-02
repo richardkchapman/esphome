@@ -17,6 +17,7 @@ from esphome.core.entity_helpers import inherit_property_from
 DEPENDENCIES = ["time"]
 
 CONF_POWER_ID = "power_id"
+CONF_RESET = "reset"
 CONF_MIN_SAVE_INTERVAL = "min_save_interval"
 total_daily_energy_ns = cg.esphome_ns.namespace("total_daily_energy")
 TotalDailyEnergyMethod = total_daily_energy_ns.enum("TotalDailyEnergyMethod")
@@ -49,6 +50,7 @@ CONFIG_SCHEMA = (
             cv.GenerateID(CONF_TIME_ID): cv.use_id(time.RealTimeClock),
             cv.Required(CONF_POWER_ID): cv.use_id(sensor.Sensor),
             cv.Optional(CONF_RESTORE, default=True): cv.boolean,
+            cv.Optional(CONF_RESET, default=True): cv.boolean,
             cv.Optional(
                 CONF_MIN_SAVE_INTERVAL, default="0s"
             ): cv.positive_time_period_milliseconds,
@@ -90,5 +92,6 @@ async def to_code(config):
     time_ = await cg.get_variable(config[CONF_TIME_ID])
     cg.add(var.set_time(time_))
     cg.add(var.set_restore(config[CONF_RESTORE]))
+    cg.add(var.set_reset(config[CONF_RESET]))
     cg.add(var.set_min_save_interval(config[CONF_MIN_SAVE_INTERVAL]))
     cg.add(var.set_method(config[CONF_METHOD]))
